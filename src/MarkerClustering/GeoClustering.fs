@@ -1,4 +1,4 @@
-﻿namespace MerkerClustering
+﻿namespace MarkerClustering
 
 open System
 open System.Collections.Generic
