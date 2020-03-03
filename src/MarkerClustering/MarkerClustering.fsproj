@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <!-- General -->
+    <AssemblyName>MarkerClustering</AssemblyName>
+    <Version>0.1.0</Version>
+    <Description>A component to cluster map markers.</Description>
+    <Copyright>Copyright 2019</Copyright>
+    <Authors>Steffen Forkmann and contributors</Authors>
+
+    <!-- Build settings -->
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <DebugType>portable</DebugType>
+    <OutputType>Library</OutputType>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+    <!-- NuGet Pack settings -->
+    <PackageId>MarkerClustering</PackageId>
+    <PackageTags>google-maps;marker;maps;clustering;fsharp</PackageTags>
+    <PackageProjectUrl>https://github.com/fsprojects/MarkerClustering</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/fsprojects/MarkerClustering</RepositoryUrl>
+
+    <!-- SourceLink settings -->
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>	    
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FSharp.Core" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="GeoClustering.fs" />
+  </ItemGroup>
+</Project>
