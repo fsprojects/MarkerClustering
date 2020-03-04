@@ -13,9 +13,8 @@ This is library is for such server side clustering of map points. It's a netstan
 
 **Original Lib**  
 
-This is highly inspired by [Google Maps Server-side Clustering with C#
-](https://github.com/pootzko/GoogleMaps.Net.Clustering), but the algorithm here is a bit simplified.
-
+This library is inspired by [Google Maps Server-side Clustering with C#
+](https://github.com/pootzko/GoogleMaps.Net.Clustering), but the algorithm here is a bit simplified for performance reasons.
 
 **Installation**  
 
