@@ -1,29 +1,13 @@
-﻿namespace MarkerClustering
+namespace MarkerClustering
 
 open System
 open System.Collections.Generic
 
-module Helpers =
+module Constants =
     let MinLonValue = -180.
     let MaxLonValue = 180.
     let Epsilon = 0.0000000001
     let MergeWithin = 2.9
-
-    // used by zoom level and deciding the grid size, O(halfSteps)
-    // O(halfSteps) ~  O(maxzoom) ~  O(k) ~  O(1)
-    // Google Maps doubles or halves the view for 1 step zoom level change
-    let half(d:float, halfSteps:int) =
-        // http://en.wikipedia.org/wiki/Decimal_degrees
-        let meter11 = 0.0001 //decimal degrees
-
-        let mutable half = d
-        for i in 0 .. halfSteps - 1 do
-            half <- half / 2.
-
-        let halfRounded = Math.Round(half, 4)
-        // avoid grid span less than this level
-        if halfRounded < meter11 then meter11 else halfRounded
-
 
 type MapPoint<'a> = {
     X : float
@@ -42,7 +26,23 @@ type Cluster<'a> = {
 }
 
 
-module ClusteringHelpers =
+module Cluster =
+    
+    /// Used by zoom level and deciding the grid size, O(halfSteps)
+    /// O(halfSteps) ~  O(maxzoom) ~  O(k) ~  O(1)
+    /// Google Maps doubles or halves the view for 1 step zoom level change
+    let half(d:float, halfSteps:int) =
+        // http://en.wikipedia.org/wiki/Decimal_degrees
+        let meter11 = 0.0001 //decimal degrees
+
+        let mutable half = d
+        for i in 0 .. halfSteps - 1 do
+            half <- half / 2.
+
+        let halfRounded = Math.Round(half, 4)
+        // avoid grid span less than this level
+        if halfRounded < meter11 then meter11 else halfRounded
+
     // Dictionary lookup key used by grid cluster algo
     let inline getId(idx:int, idy:int) =
         String.Concat(idx, ";", idy)
@@ -50,20 +50,20 @@ module ClusteringHelpers =
     let getPointMappedIds(point:MapPoint<'a>, deltaX, deltaY) =
         let relativeY = point.Y
 
-        let mutable overlapMapMinX = (int)(Helpers.MinLonValue / deltaX) - 1
-        let mutable overlapMapMaxX = (int)(Helpers.MaxLonValue / deltaX)
+        let mutable overlapMapMinX = (int)(Constants.MinLonValue / deltaX) - 1
+        let mutable overlapMapMaxX = (int)(Constants.MaxLonValue / deltaX)
 
         // The deltaX = 20 example scenario, then set the value 9 to 8 and -10 to -9
 
         // Similar to if (LatLonInfo.MaxLonValue % deltax == 0) without floating presicion issue
-        if Math.Abs(Helpers.MaxLonValue % deltaX - 0.) < Helpers.Epsilon then
+        if Math.Abs(Constants.MaxLonValue % deltaX - 0.) < Constants.Epsilon then
             overlapMapMaxX <- overlapMapMaxX - 1
             overlapMapMinX <- overlapMapMinX + 1
 
         let mutable idxx = (int)(point.X / deltaX)
         if point.X < 0. then idxx <- idxx - 1
 
-        if Math.Abs(Helpers.MaxLonValue % point.X - 0.) < Helpers.Epsilon then
+        if Math.Abs(Constants.MaxLonValue % point.X - 0.) < Constants.Epsilon then
             if point.X < 0. then idxx <- idxx + 1 else idxx <- idxx - 1
 
         if idxx = overlapMapMinX then idxx <- overlapMapMaxX
@@ -97,10 +97,10 @@ type Clustering<'a>(zoomLevel:int) =
     let gridY = 5.
 
     // Relative values, used for adjusting grid size
-    let deltaX = Helpers.half(xZoomLevel1, zoomLevel - 1) / gridX
-    let deltaY = Helpers.half(yZoomLevel1, zoomLevel - 1) / gridY
-    let minDistX = deltaX / Helpers.MergeWithin
-    let minDistY = deltaY / Helpers.MergeWithin
+    let deltaX = Cluster.half(xZoomLevel1, zoomLevel - 1) / gridX
+    let deltaY = Cluster.half(yZoomLevel1, zoomLevel - 1) / gridY
+    let minDistX = deltaX / Constants.MergeWithin
+    let minDistY = deltaY / Constants.MergeWithin
 
     // If clusters in grid are too close to each other, merge them
     let withinDist = max minDistX minDistY
@@ -115,7 +115,7 @@ type Clustering<'a>(zoomLevel:int) =
                         if x <> 0 || y <> 0 then
                             match buckets.TryGetValue key with
                             | true, current ->
-                                let neighborKey = ClusteringHelpers.getId(current.IDX + x, current.IDY + y)
+                                let neighborKey = Cluster.getId(current.IDX + x, current.IDY + y)
 
                                 match buckets.TryGetValue neighborKey with
                                 | true, neighbor ->
@@ -126,7 +126,7 @@ type Clustering<'a>(zoomLevel:int) =
                                         let points = current.Points @ neighbor.Points
 
                                         // recalc centroid
-                                        let x,y = ClusteringHelpers.getCentroidFromCluster points
+                                        let x,y = Cluster.getCentroidFromCluster points
                                         buckets.[current.ID] <-
                                             { current
                                                 with
@@ -145,30 +145,30 @@ type Clustering<'a>(zoomLevel:int) =
             let buckets = Dictionary<string, Cluster<'a>>()
 
             // Put points in buckets
-            for p in points do
-                let idx,idy = ClusteringHelpers.getPointMappedIds(p, deltaX, deltaY)
-                let id = ClusteringHelpers.getId(idx, idy)
+            for point in points do
+                let idx,idy = Clusters.getPointMappedIds(point, deltaX, deltaY)
+                let id = Cluster.getId(idx, idy)
 
                 buckets.[id] <-
                     match buckets.TryGetValue id with
                     | true, bucket ->
                         { bucket with
                             Count = bucket.Count + 1
-                            Points = p :: bucket.Points }
+                            Points = point :: bucket.Points }
                     | _ ->
                         { IDX = idx
                           IDY = idy
                           ID = id
-                          X = p.X
-                          Y = p.Y
+                          X = point.X
+                          Y = point.Y
                           Count = 1
-                          Points = [p] }
+                          Points = [point] }
 
 
             let clusters = Dictionary<_,_>()
-            for b in buckets.Values do
-                let x,y = ClusteringHelpers.getCentroidFromCluster b.Points
-                clusters.Add(b.ID, { b with X = x; Y = y })
+            for bucket in buckets.Values do
+                let x,y = Cluster.getCentroidFromCluster bucket.Points
+                clusters.Add(bucket.ID, { bucket with X = x; Y = y })
 
             this.MergeClustersGrid clusters
 
