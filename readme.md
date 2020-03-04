@@ -1,5 +1,7 @@
 # MarkerClustering
 
+[![MarkerClusterung on Nuget](https://buildstats.info/nuget/MarkerClustering)](https://www.nuget.org/packages/MarkerClustering/)
+
 This is a netstandard library for clustering map points. It can be used for server-side clustering of marker e.g. for Google Maps and ASP.NET Core.
 
 
