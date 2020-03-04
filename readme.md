@@ -18,7 +18,7 @@ This library is inspired by [Google Maps Server-side Clustering with C#
 
 **Installation**  
 
-* The lastes version of MarkerClusterung is available on [NuGet](https://www.nuget.org/packages/MarkerClustering).
+* The latest version of MarkerClusterung is available on [NuGet](https://www.nuget.org/packages/MarkerClustering).
 
 
 **Usage**
