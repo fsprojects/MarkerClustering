@@ -21,7 +21,8 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/fsprojects/MarkerClustering</RepositoryUrl>
-
+    <PackageReleaseNotes>Add Fable support</PackageReleaseNotes>
+    
     <!-- SourceLink settings -->
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>	    
@@ -31,6 +32,10 @@
     <PackageReference Include="FSharp.Core" Version="4.7.0" />
   </ItemGroup>
 
+  <ItemGroup>
+     <Content Include="*.fsproj; *.fs; *.js;" PackagePath="fable\" />
+  </ItemGroup>
+   
   <ItemGroup>
     <Compile Include="GeoClustering.fs" />
   </ItemGroup>
