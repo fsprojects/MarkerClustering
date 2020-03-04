@@ -2,11 +2,7 @@
 
 [![MarkerClusterung on Nuget](https://buildstats.info/nuget/MarkerClustering)](https://www.nuget.org/packages/MarkerClustering/)
 
-If you have lots and lots of markers to display on a map then often your map becomes slow or you can't see the forest for the trees because those markers are basically everywhere. A common strategy is to use cluster markers and to only show how many markers are in a given area. Javascript map components often already have support for this. [Here](https://cloud.google.com/blog/products/maps-platform/how-cluster-map-markers) you can read how client side clustering can be done with GoogleMaps API.
-
-Sometimes this client side clustering is not enough since you still have to send lots and lots of data down to the client. This is when server side clustering comes into play. 
-
-This is library is for such server side clustering of map points. It's a netstandard library and can be used in all .NET Core programs and ASP.NET Core.
+Library that allows you to group a number of geo-points (points with longitude and latitude coordinates) into clusters based on their relative proximity to each other and the zoom level of the map being used. Since the library targets netstandard, it can be used on the server with .NET Core applications when you want to minimize the number of points returned to the client application and therefore reducing the network traffic by returning clustered points instead. The library can also be used by [Fable](https://github.com/fable-compiler/fable) projects to enable client-side marker clustering when you are using map components which do not have clustering support built-in like with the [Feliz.PigeonMaps](https://zaid-ajaj.github.io/Feliz/#/Ecosystem/PigeonMaps) package where you need to do clustering yourself using this library. Many map components on the client-side will have clustering support by default. You will not need this library when you are using GoogleMaps API because it [already supports](https://cloud.google.com/blog/products/maps-platform/how-cluster-map-markers) clustering.  
 
 
 ![Clustering Img](https://raw.githubusercontent.com/pootzko/GoogleMaps.Net.Clustering/master/cluster-map.png "clustering image")
