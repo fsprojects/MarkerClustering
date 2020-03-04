@@ -2,7 +2,11 @@
 
 [![MarkerClusterung on Nuget](https://buildstats.info/nuget/MarkerClustering)](https://www.nuget.org/packages/MarkerClustering/)
 
-This is a netstandard library for clustering map points. It can be used for server-side clustering of marker e.g. for Google Maps and ASP.NET Core.
+If you have lots and lots of markers to display on a map then often your map becomes slow or you can't see the forest for the trees because those markers are basically everywhere. A common strategy is to use cluster markers and to only show how many markers are in a given area. Javascript map components often already have support for this. [Here](https://cloud.google.com/blog/products/maps-platform/how-cluster-map-markers) you can read how client side clustering can be done with GoogleMaps API.
+
+Sometimes this client side clustering is not enough since you still have to send lots and lots of data down to the client. This is when server side clustering comes into play. 
+
+This is library is for such server side clustering of map points. It's a netstandard library and can be used in all .NET Core programs and ASP.NET Core.
 
 
 ![Clustering Img](https://raw.githubusercontent.com/pootzko/GoogleMaps.Net.Clustering/master/cluster-map.png "clustering image")
