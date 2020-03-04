@@ -2,7 +2,7 @@
   <PropertyGroup>
     <!-- General -->
     <AssemblyName>MarkerClustering</AssemblyName>
-    <Version>0.3.0</Version>
+    <Version>0.4.0</Version>
     <Description>A component to cluster map markers.</Description>
     <Copyright>Copyright 2019</Copyright>
     <Authors>Steffen Forkmann and contributors</Authors>

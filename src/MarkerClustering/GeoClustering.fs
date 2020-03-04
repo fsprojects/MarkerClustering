@@ -1,4 +1,4 @@
-namespace MarkerClustering
+﻿namespace MarkerClustering
 
 open System
 open System.Collections.Generic
@@ -146,7 +146,7 @@ type Clustering<'a>(zoomLevel:int) =
 
             // Put points in buckets
             for point in points do
-                let idx,idy = Clusters.getPointMappedIds(point, deltaX, deltaY)
+                let idx,idy = Cluster.getPointMappedIds(point, deltaX, deltaY)
                 let id = Cluster.getId(idx, idy)
 
                 buckets.[id] <-
