@@ -28,8 +28,8 @@ The following code describes a typical usage in ASP.NET Core and GoogleMaps:
         let filtered =
             markers
             |> Array.filter (fun m ->
-                m.Lat <= ne.Lat && m.Long >= ne.Long &&
-                  m.Lat >= sw.Lat && m.Long <= sw.Long)
+                m.Lat <= ne.Lat && m.Long <= ne.Long &&
+                  m.Lat >= sw.Lat && m.Long >= sw.Long)
 
         // Map to library's MapPoint<'a>
         let points : MapPoint<_VisibleChargingPoint_> [] =
