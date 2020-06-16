@@ -27,7 +27,7 @@ type Cluster<'a> = {
 
 
 module Cluster =
-    
+
     /// Used by zoom level and deciding the grid size, O(halfSteps)
     /// O(halfSteps) ~  O(maxzoom) ~  O(k) ~  O(1)
     /// Google Maps doubles or halves the view for 1 step zoom level change
@@ -75,7 +75,6 @@ module Cluster =
 
         idx, idy
 
-
     let getCentroidFromCluster(points:MapPoint<'a> seq) =
         let mutable x = 0.
         let mutable y = 0.
@@ -87,6 +86,22 @@ module Cluster =
 
         let count = float count
         x / count, y / count
+
+    let getNearestPointFromCentroid(points:MapPoint<'a> seq, (centroidX,centroidY)) =
+        let mutable x = centroidX
+        let mutable y = centroidY
+        let mutable minDist = System.Double.MaxValue
+        for p in points do
+            let dist =
+                let dx = p.X - centroidX
+                let dy = p.Y - centroidY
+                dx * dx + dy * dy
+            if dist < minDist then
+                minDist <- dist
+                x <- p.X
+                y <- p.Y
+
+        x, y
 
 type Clustering<'a>(zoomLevel:int) =
     // Absolute base value of longitude distance, heuristic value
@@ -167,7 +182,8 @@ type Clustering<'a>(zoomLevel:int) =
 
             let clusters = Dictionary<_,_>()
             for bucket in buckets.Values do
-                let x,y = Cluster.getCentroidFromCluster bucket.Points
+                let centroidX,centroidY = Cluster.getCentroidFromCluster bucket.Points
+                let x,y = Cluster.getNearestPointFromCentroid(bucket.Points, (centroidX,centroidY))
                 clusters.Add(bucket.ID, { bucket with X = x; Y = y })
 
             this.MergeClustersGrid clusters

@@ -2,7 +2,7 @@
   <PropertyGroup>
     <!-- General -->
     <AssemblyName>MarkerClustering</AssemblyName>
-    <Version>0.5.0</Version>
+    <Version>0.6.0</Version>
     <Description>A component to cluster map markers.</Description>
     <Copyright>Copyright 2019</Copyright>
     <Authors>Steffen Forkmann and contributors</Authors>
@@ -22,10 +22,10 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/fsprojects/MarkerClustering</RepositoryUrl>
     <PackageReleaseNotes>Add Fable support</PackageReleaseNotes>
-    
+
     <!-- SourceLink settings -->
     <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>	    
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <ItemGroup>
@@ -35,7 +35,7 @@
   <ItemGroup>
      <Content Include="*.fsproj; *.fs; *.js;" PackagePath="fable\" />
   </ItemGroup>
-   
+
   <ItemGroup>
     <Compile Include="GeoClustering.fs" />
   </ItemGroup>
