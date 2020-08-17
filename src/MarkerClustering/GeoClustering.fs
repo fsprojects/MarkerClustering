@@ -31,14 +31,11 @@ module Cluster =
     /// Used by zoom level and deciding the grid size, O(halfSteps)
     /// O(halfSteps) ~  O(maxzoom) ~  O(k) ~  O(1)
     /// Google Maps doubles or halves the view for 1 step zoom level change
-    let half(d:float, halfSteps:int) =
+    let half(d:float, halfSteps:float) =
         // http://en.wikipedia.org/wiki/Decimal_degrees
         let meter11 = 0.0001 //decimal degrees
 
-        let mutable half = d
-        for i in 0 .. halfSteps - 1 do
-            half <- half / 2.
-
+        let half = d * Math.Pow(0.5, halfSteps)
         let halfRounded = Math.Round(half, 4)
         // avoid grid span less than this level
         if halfRounded < meter11 then meter11 else halfRounded
@@ -103,7 +100,7 @@ module Cluster =
 
         x, y
 
-type Clustering<'a>(zoomLevel:int) =
+type Clustering<'a>(zoomLevel:float) =
     // Absolute base value of longitude distance, heuristic value
     let xZoomLevel1 = 480.
     // Absolute base value of latitude distance, heuristic value
@@ -112,8 +109,8 @@ type Clustering<'a>(zoomLevel:int) =
     let gridY = 5.
 
     // Relative values, used for adjusting grid size
-    let deltaX = Cluster.half(xZoomLevel1, zoomLevel - 1) / gridX
-    let deltaY = Cluster.half(yZoomLevel1, zoomLevel - 1) / gridY
+    let deltaX = Cluster.half(xZoomLevel1, zoomLevel - 1.0) / gridX
+    let deltaY = Cluster.half(yZoomLevel1, zoomLevel - 1.0) / gridY
     let minDistX = deltaX / Constants.MergeWithin
     let minDistY = deltaY / Constants.MergeWithin
 
